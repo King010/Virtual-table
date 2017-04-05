@@ -1,0 +1,82 @@
+#include<iostream>
+using namespace std;
+
+class Base
+{
+public:
+	virtual void FunTest1()
+	{
+		cout << "Base::FunTest1" << endl;
+	}
+	virtual void FunTest2()
+	{
+		cout << "Base::FunTest2" << endl;
+	}
+	int _data1;
+};
+
+class Drived :public Base
+{
+public:
+	virtual void FunTest3()
+	{
+		cout << "Drived::FunTest3" << endl;
+	}
+	virtual void FunTest4()
+	{
+		cout << "Drived::FunTest4" << endl;
+	}
+	int _data2;
+};
+
+class Base
+{
+public:
+	virtual void FunTest1()
+	{
+		cout << "Base::FunTest1" << endl;
+	}
+	virtual void FunTest2()
+	{
+		cout << "Base::FunTest2" << endl;
+	}
+	int _data1;
+};
+
+class Drived :public Base
+{
+public:
+	virtual void FunTest1()
+	{
+		cout << "Drived::FunTest1" << endl;
+	}
+	virtual void FunTest3()
+	{
+		cout << "Drived::FunTest3" << endl;
+	}
+	int _data2;
+};
+
+typedef void(*VFP)();
+
+void Printvtp()//打印虚表
+{
+	Drived d;
+	Base &b = d;
+	VFP*fun = (VFP*)*(int*)&b;
+	while (*fun)
+	{
+		(*fun)();
+		++fun;
+	}
+}
+int main()
+{
+	Base b;
+	Drived d;
+	cout << sizeof(d) << endl;//12
+	cout << sizeof(b) << endl;//8
+	Printvtp();
+	system("pause");
+	return 0;
+}
