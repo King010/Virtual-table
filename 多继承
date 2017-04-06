@@ -1,0 +1,96 @@
+#include<iostream>
+using namespace std;
+
+class Base1
+{
+public:
+	Base1()
+		:_data1(1)
+	{}
+		virtual void FunTest1()
+		{
+			cout << "Base1::FunTest1" << endl;
+		}
+		virtual void FunTest2()
+		{
+			cout << "Base1::FunTest2" << endl;
+		}
+		int _data1;
+};
+class Base2
+{
+public:
+	Base2()
+		:_data2(2)
+	{}
+	virtual void FunTest3()
+	{
+		cout << "Base2::FunTest3" << endl;
+	}
+	virtual void FunTest4()
+	{
+		cout << "Base2::FunTest4" << endl;
+	}
+	int _data2;
+};
+class Derived:public Base1,public Base2
+{
+public:
+	Derived()
+		:_data3(3)
+	{}
+	virtual void FunTest5()
+	{
+		cout << "Drived::FunTest5" << endl;
+	}
+	virtual void FunTest6()
+	{
+		cout << "Drived::FunTest6" << endl;
+	}
+	int _data3;
+
+};
+
+typedef void(*VFP)();
+
+void Printvtp()//打印虚表
+{
+	Derived d;
+	cout << "derived虚表" << endl;
+	VFP*fun = (VFP*)*(int*)&d;
+	while (*fun)
+	{
+		(*fun)();
+		++fun;
+	}
+	Base1 b1;
+	fun = (VFP*)*(int*)&b1;
+	cout << endl;
+	cout << "base1虚表" << endl;
+	while (*fun)
+	{
+		(*fun)();
+		++fun;
+	}
+	Base2 b2;
+	fun = (VFP*)*(int*)&b2;
+	cout << endl;
+	cout << "base2虚表" << endl;
+	while (*fun)
+	{
+		(*fun)();
+		++fun;
+	}
+}
+int main()
+{
+	Base1 b1;
+	Base2 b2;
+	Derived d;
+	cout << sizeof(d) << endl;//20
+	cout << sizeof(b1) << endl;//8
+	cout << sizeof(b2) << endl;//8
+	Printvtp();
+	system("pause");
+	return 0;
+}
